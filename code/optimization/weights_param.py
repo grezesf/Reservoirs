@@ -17,35 +17,44 @@ def main():
 	# data dir
 	data_dir = sys.argv[1]
 	# load the data
-	for (path, dirs, files) in os.walk(data_dir):
-		for file in files:
-			print file
-			if file == "train_inputs.pck":
-				f = open(path + "/" + file)
-				train_inputs = pickle.load(f)
-				f.close()
-			if file == "train_outputs.pck":
-				f = open(path + "/" + file)
-				train_outputs = pickle.load(f)
-				f.close()
-			if file == "test_inputs.pck":
-				f = open(path + "/" + file)
-				test_inputs = pickle.load(f)
-				f.close()
-			if file == "test_outputs.pck":
-				f = open(path + "/" + file)
-				test_outputs = pickle.load(f)
-				f.close()
+	# for (path, dirs, files) in os.walk(data_dir):
+	# 	for file in files:
+	# 		print file
+	# 		if file == "train_inputs.pck":
+	# 			f = open(path + "/" + file)
+	# 			train_inputs = pickle.load(f)
+	# 			f.close()
+	# 		if file == "train_outputs.pck":
+	# 			f = open(path + "/" + file)
+	# 			train_outputs = pickle.load(f)
+	# 			f.close()
+	# 		if file == "test_inputs.pck":
+	# 			f = open(path + "/" + file)
+	# 			test_inputs = pickle.load(f)
+	# 			f.close()
+	# 		if file == "test_outputs.pck":
+	# 			f = open(path + "/" + file)
+	# 			test_outputs = pickle.load(f)
+	# 			f.close()
 
-	train_inputs =  sp.array(train_inputs)
-	test_inputs  =  sp.array(test_inputs)
-	train_outputs= sp.array(train_outputs)
-	test_outputs = sp.array(test_outputs)
+
+	train_inputs = [[1,1,1,1],[2,2,2,2],[3,3,3,3]]
+	train_outputs = [[1,-1],[1,-1],[-1,1]]
+	test_inputs = [[1,1,2,2]]
+	# print train_inputs
+
+
+	# encapsulate 
+	# train_inputs = [train_inputs]
+	# test_inputs  = [test_inputs]
+	# train_outputs= [train_outputs]
+	# test_outputs = [test_outputs]
 
 
 	# reservoir parameters
-	input_dim = train_inputs.shape[1]
+	input_dim = len(train_inputs[0])
 	print "input_dim = ", input_dim
+	print "nb train points =", len(train_inputs)
 	output_dim = 1000 # nb of neurons 
 	spectral_radius = 0.4
 	input_scaling = 0.4
@@ -59,17 +68,31 @@ def main():
 	readout_node_1 = Oger.nodes.WTANode()
 
 	# create flow
-	flow_1 = reservoir_node_1 + readout_node_1
+	flow_1 = mdp.Flow([reservoir_node_1, readout_node_1])
+
 
 	print "Training..."
-	flow_1.train([[], zip(train_inputs, train_outputs)])
+
+	# print len(zip(train_inputs, train_outputs))
+	# print len(zip(train_inputs, train_outputs)[0])
+	# print len(zip(train_inputs, train_outputs)[0][0])
+
+	print zip(train_inputs, train_outputs)
+	flow_1.train([None, zip(train_inputs, train_outputs)])
 
 	print "Applying to testset..."
-	ytest = []
+	# ytest = []
+	# print type(test_inputs)
+	# print type(test_inputs[0])
+	# print type(test_inputs[0][0])
+	# print type(test_inputs[0][0][0])
+
 	for xtest in test_inputs:
-		ytest.append(flow(xtest))
+		print xtest
+		print flow_1(xtest)
+		# ytest.append(flow_1(xtest))
 	
-	print "Error : " + str(mdp.numx.mean([loss_01_time(sample, target) for (sample, target) in zip(ytest, test_outputs)]))
+	# print "Error : " + str(mdp.numx.mean([loss_01_time(sample, target) for (sample, target) in zip(ytest, test_outputs)]))
 
 
 # Call to main 

@@ -102,17 +102,25 @@ def main():
 
 	# dump inputs and outputs to be loaded later
 	f  = open(savedir + "/train/" + "train_outputs.pck", 'w')
-	pickle.dump(sp.array(train_outputs), f)
+	pickle.dump(train_outputs, f)
 	f.close()
 	f = open(savedir + "/test/" + "test_outputs.pck", 'w')
-	pickle.dump(sp.array(test_outputs), f)
+	pickle.dump(test_outputs, f)
 	f.close()
 	f  = open(savedir + "/train/" + "train_inputs.pck", 'w')
-	pickle.dump(sp.array(train_inputs), f)
+	pickle.dump(train_inputs, f)
 	f.close()
 	f  = open(savedir + "/test/" + "test_inputs.pck", 'w')
-	pickle.dump(sp.array(test_inputs), f)
+	pickle.dump(test_inputs, f)
 	f.close()
+
+	f = open(savedir + "/train/" + "training_data.pickle", 'w')
+	pickle.dump(zip(train_inputs,train_outputs), f)
+	f.close()
+	f = open(savedir + "/test/" + "test_data.pickle", 'w')
+	pickle.dump(zip(test_inputs,test_outputs), f)
+	f.close()
+
 
 
 
