@@ -67,7 +67,7 @@ if __name__ == "__main__":
     y[-1, :] = x[0, :]
 
     # Open file with true probabilities.
-    trueprobs_file = os.getcwd() + '/../datasets/trueprobs_simple_pcfg.txt.gz'
+    trueprobs_file = os.getcwd() + '/../../datasets/trueprobs_simple_pcfg.txt.gz'
     
     try:
         fin = gzip.open(trueprobs_file)

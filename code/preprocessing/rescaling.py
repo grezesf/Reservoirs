@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import os
 import sys
-import numpy as np
 import math
 
 
@@ -20,8 +19,6 @@ def main():
 	# useful variables
 	nbFiles = 0
 	nbFrames = 0
-	V = np.array([0])
-
 
 	# values to calculate
 	averages = [0,0,0,0,0,0]
@@ -49,6 +46,7 @@ def main():
 	for (path, dirs, files) in os.walk(MFCCPath):
 		for file in files:
 			# look only at train files (of mfccs of course)
+			# skip the SA files
 			if ".mfcc" in file  and "sa" not in file and "/train/" in path:
 			# if ".mfcc" in file  and "sa" not in file:
 
@@ -116,8 +114,23 @@ def main():
 	print "nbFrames =" , nbFrames
 	print "averages = " , averages
 	print "sum = ", alphas
-	print "alphas = " , [nbFrames/x for x in alphas]
+	alphas = [nbFrames/x for x in alphas]
+	alphas[3:] = [12*x for x in alphas[3:]]
+	print "alphas = " , alphas
 
+
+	# save results to files
+	f = open(targetDir + "averages.csv", 'w')
+	f.write( "log(E);de_log(E);dede_log(E);cepstrum;de_cepstrum;dede_cepstrum\n")
+	for a in averages:
+	  f.write("%s;" % a)
+	f.close()
+
+	f = open(targetDir + "alphas.csv", 'w')
+	f.write( "log(E);de_log(E);dede_log(E);cepstrum;de_cepstrum;dede_cepstrum\n")
+	for a in alphas:
+	  f.write("%s;" % a)
+	f.close()
 
 # Call to main 
 if __name__=='__main__':
